@@ -38,12 +38,13 @@ module XlsExporter
     def export_models(scope, *attrs)
       # TODO: associate human name with proc in attrs
       headers(*attrs.map(&:to_s).map(&:humanize))
-      to_body = scope.all.map do |model|
+      to_body = scope.map do |instance|
         attrs.map do |attr|
           if attr.class == Proc
-            attr.call model
+            attr.call instance
           elsif attr.class == Symbol
-            model.try attr
+            # shouldn't using `try` because of SimpleDelegator
+            instance.respond_to?(attr) ? instance.send(attr) : nil
           end
         end
       end
