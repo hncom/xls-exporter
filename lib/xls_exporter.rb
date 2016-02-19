@@ -46,10 +46,9 @@ module XlsExporter
       headers(*humanize_columns(columns))
       to_body = scope.map do |instance|
         columns.map do |column|
+          column = column.values.first if column.is_a? Hash
           if column.is_a? Proc
             instance.instance_exec(&column)
-          elsif column.is_a? Hash
-            instance.instance_exec(&column.values.first)
           elsif column.is_a? Symbol
             instance.send column
           end
