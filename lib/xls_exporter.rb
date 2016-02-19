@@ -35,16 +35,16 @@ module XlsExporter
       @body = new_body
     end
 
-    def export_models(scope, *attrs)
-      # TODO: associate human name with proc in attrs
-      headers(*attrs.map(&:to_s).map(&:humanize))
+    def export_models(scope, *columns)
+      # TODO: associate human name with proc in columns
+      headers(*columns.map(&:to_s).map(&:humanize))
       to_body = scope.map do |instance|
-        attrs.map do |attr|
-          if attr.class == Proc
-            attr.call instance
-          elsif attr.class == Symbol
+        columns.map do |column|
+          if column.class == Proc
+            instance.instance_exec &column
+          elsif column.class == Symbol
             # shouldn't using `try` because of SimpleDelegator
-            instance.respond_to?(attr) ? instance.send(attr) : nil
+            instance.send column
           end
         end
       end
