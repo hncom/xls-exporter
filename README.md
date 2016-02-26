@@ -36,11 +36,11 @@ end
 
 Result
 
-| ID | Full Name      | User Email                    |   |   |
-|----|----------------|-------------------------------|---|---|
-| 1  | Zhora Zhukov   | victory_marshal@army.su       |   |   |
-| 2  | Petr The First | borody@doloi.ru               |   |   |
-| 3  | Vladimir P.    | babushka_would_be@dedushka.ru |   |   |
+| ID | Full Name      | User Email                    |
+|----|----------------|-------------------------------|
+| 1  | Zhora Zhukov   | victory_marshal@army.su       |
+| 2  | Petr The First | borody@doloi.ru               | 
+| 3  | Vladimir P.    | babushka_would_be@dedushka.ru |
 
 
 ## Development
