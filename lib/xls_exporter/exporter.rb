@@ -10,7 +10,6 @@ module XlsExporter
 
     def initialize
       @book     = Spreadsheet::Workbook.new
-      @filename = "default_filename"
     end
 
     def add_sheet(sheet_name = nil)
@@ -65,9 +64,13 @@ module XlsExporter
 
     def save!
       save_sheet!
-      filename = "./#{@filename}_#{Time.now.to_i}.xls"
-      @book.write(filename)
-      puts "Report has been saved as #{filename}"
+      if @filename.present?
+        filename = "./#{@filename}_#{Time.now.to_i}.xls"
+        @book.write(filename)
+        puts "Report has been saved as #{filename}"
+      else
+        @book
+      end
     end
   end
 end
