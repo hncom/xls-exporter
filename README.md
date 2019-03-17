@@ -26,7 +26,7 @@ end
 
 require 'xls_exporter'
 
-XlsExport.export do
+XlsExporter.export do
   filename 'your-file-name'
 
   add_sheet 'your-sheet-name'
