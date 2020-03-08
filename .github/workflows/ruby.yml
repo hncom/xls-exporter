@@ -13,6 +13,6 @@ jobs:
         ruby-versions: 2.6.5, 2.7.0, 2.5.7, 2.4.9
     - name: Build and test with Rake
       run: |
-        gem install bundler -v '2.1.2'
+        gem install bundler -v '1.11'
         bundle install --jobs 4 --retry 3
         rubocop
