@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'xls_exporter/version'
 require 'xls_exporter/exporter'
 

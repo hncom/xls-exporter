@@ -1,7 +1,11 @@
+# frozen_string_literal: true
+
 require 'spreadsheet'
+require 'xls_exporter/styler'
 
 module XlsExporter
   class Exporter
+    include XlsExporter::Styler
     def self.export(&block)
       exporter = new
       exporter.instance_exec(&block)
@@ -9,7 +13,7 @@ module XlsExporter
     end
 
     def initialize
-      @book     = Spreadsheet::Workbook.new
+      @book = Spreadsheet::Workbook.new
     end
 
     def add_sheet(sheet_name = nil)
@@ -18,6 +22,7 @@ module XlsExporter
       @body    = []
       @sheet   = @book.create_worksheet
 
+      @sheet.default_format = @format if @format.present?
       @sheet.name = sheet_name
     end
 
@@ -64,12 +69,48 @@ module XlsExporter
 
     def save!
       save_sheet!
+      @book.worksheets.each do |worksheet|
+        autofit worksheet
+      end
       if @filename.present?
         filename = "./#{@filename}_#{Time.now.to_i}.xls"
         @book.write(filename)
         puts "Report has been saved as #{filename}"
       else
         @book
+      end
+    end
+
+    WORDS_IN_LINE = 5
+    FONT_SIZE = 10
+    LINE_HEIGHT = FONT_SIZE + 3
+
+    def autofit(worksheet)
+      worksheet.rows.each do |row|
+        lines_count = row.each_with_index.map do |cell, _index|
+          if cell.present?
+            words_count = cell.split(' ').count
+            lines = words_count / WORDS_IN_LINE
+            lines += 1 if words_count % WORDS_IN_LINE != 0
+            lines * LINE_HEIGHT
+          else
+            LINE_HEIGHT
+          end
+        end
+        row.height = lines_count.max
+      end
+      worksheet.column_count.times do |col_idx|
+        column = worksheet.column(col_idx)
+        column.width = column.each_with_index.map do |cell, _row|
+          if cell.present?
+            words = cell.split(' ')
+            words.each_slice(WORDS_IN_LINE).map do |line|
+              line.join(' ').size
+            end.max
+          else
+            0
+          end
+        end.max
       end
     end
   end
