@@ -58,3 +58,6 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/xls_exporter. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
+## Articles about
+
+* [Ruby + Excel. Autofit cell content](https://medium.com/@kalashnikovisme/ruby-excel-autofit-cell-content-c1cd1e329706)
