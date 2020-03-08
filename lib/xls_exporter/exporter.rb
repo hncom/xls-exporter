@@ -6,7 +6,7 @@ require 'xls_exporter/styler'
 class XlsExporter::Exporter
   include XlsExporter::Styler
 
-  attr_writer :filename, :body
+  attr_writer :filename
 
   def self.export(&block)
     exporter = new
@@ -30,6 +30,10 @@ class XlsExporter::Exporter
 
   def headers(*args)
     @headers = args
+  end
+
+  def body(new_body)
+    @body = new_body
   end
 
   def humanize_columns(columns)

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module XlsExporter::Styler
-  def default_style=(**options)
+  def default_style(**options)
     @format = Spreadsheet::Format.new(**options)
   end
 
