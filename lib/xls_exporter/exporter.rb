@@ -32,9 +32,7 @@ class XlsExporter::Exporter
     @headers = args
   end
 
-  def body(new_body)
-    @body = new_body
-  end
+  attr_writer :body
 
   def humanize_columns(columns)
     columns.map do |column|
@@ -45,7 +43,7 @@ class XlsExporter::Exporter
 
   def export_models(scope, *columns)
     headers(*humanize_columns(columns))
-    body to_body scope, columns
+    @body = to_body scope, columns
   end
 
   def to_body(scope, columns)
