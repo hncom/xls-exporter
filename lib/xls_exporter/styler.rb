@@ -5,9 +5,25 @@ module XlsExporter::Styler
     @format = Spreadsheet::Format.new(**options)
   end
 
-  WORDS_IN_LINE = 5
-  FONT_SIZE = 10
-  LINE_HEIGHT = FONT_SIZE + 3
+  def line_height
+    font_size + 3
+  end
+
+  def words_in_line
+    @words_in_line || 5 
+  end
+
+  def words_in_line=(count)
+    @words_in_line = count
+  end
+
+  def font_size
+    @font_size || 10
+  end
+
+  def font_size=(pt)
+    @font_size = pt
+  end
 
   def autofit(worksheet)
     fit_rows worksheet
@@ -17,7 +33,7 @@ module XlsExporter::Styler
   def fit_rows(worksheet)
     worksheet.rows.each do |row|
       row.height = row.each_with_index.map do |cell|
-        cell.present? ? cell_height(cell) : LINE_HEIGHT
+        cell.present? ? cell_height(cell) : line_height
       end.max
     end
   end
@@ -32,13 +48,13 @@ module XlsExporter::Styler
   end
 
   def cell_height(cell)
-    lines = words(cell).count / WORDS_IN_LINE
-    lines += 1 if words(cell).count % WORDS_IN_LINE != 0
-    lines * LINE_HEIGHT
+    lines = words(cell).count / words_in_line
+    lines += 1 if words(cell).count % words_in_line != 0
+    lines * line_height
   end
 
   def cell_width(cell)
-    words(cell).each_slice(WORDS_IN_LINE).map do |line|
+    words(cell).each_slice(words_in_line).map do |line|
       line.join(' ').size
     end.max
   end
