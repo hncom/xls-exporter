@@ -1,0 +1,29 @@
+Documentation:
+  Enabled: false
+Metrics/LineLength:
+  Max: 120
+Metrics/BlockLength:
+  Enabled: false
+  Include:
+    - spec/
+Metrics/AbcSize:
+  Max: 18
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+  Exclude:
+    - config/application.rb
+Layout/ArgumentAlignment:
+  EnforcedStyle: with_fixed_indentation
+Style/MixinUsage:
+  Exclude:
+    - bin/*
+AllCops:
+  Include:
+    - app/**/*.rb
+    - config/**/*.rb
+    - db/seeds.rb
+    - lib/**/*.rb
+    - spec/**/*.rb
+    - Gemfile
+    - Rakefile
+  TargetRubyVersion: 2.7
