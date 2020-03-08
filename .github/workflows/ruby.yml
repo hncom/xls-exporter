@@ -15,4 +15,4 @@ jobs:
       run: |
         gem install bundler -v '1.11'
         bundle install --jobs 4 --retry 3
-        rubocop
+        bundle exec rubocop
