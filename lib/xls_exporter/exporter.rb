@@ -6,6 +6,8 @@ require 'xls_exporter/styler'
 class XlsExporter::Exporter
   include XlsExporter::Styler
 
+  attr_writer :filename, :body
+
   def self.export(&block)
     exporter = new
     exporter.instance_exec(&block)
@@ -26,16 +28,8 @@ class XlsExporter::Exporter
     @sheet.name = sheet_name
   end
 
-  def filename(new_filename)
-    @filename = new_filename
-  end
-
   def headers(*args)
     @headers = args
-  end
-
-  def body(new_body)
-    @body = new_body
   end
 
   def humanize_columns(columns)
@@ -47,7 +41,11 @@ class XlsExporter::Exporter
 
   def export_models(scope, *columns)
     headers(*humanize_columns(columns))
-    to_body = scope.map do |instance|
+    body to_body scope, columns
+  end
+
+  def to_body(scope, columns)
+    scope.map do |instance|
       columns.map do |column|
         column = column.values.first if column.is_a? Hash
         if column.is_a? Proc
@@ -57,7 +55,6 @@ class XlsExporter::Exporter
         end
       end
     end
-    body to_body
   end
 
   def save_sheet!
@@ -69,48 +66,13 @@ class XlsExporter::Exporter
 
   def save!
     save_sheet!
-    @book.worksheets.each do |worksheet|
-      autofit worksheet
-    end
+    @book.worksheets.each { |worksheet| autofit worksheet }
     if @filename.present?
       filename = "./#{@filename}_#{Time.now.to_i}.xls"
       @book.write(filename)
       puts "Report has been saved as #{filename}"
     else
       @book
-    end
-  end
-
-  WORDS_IN_LINE = 5
-  FONT_SIZE = 10
-  LINE_HEIGHT = FONT_SIZE + 3
-
-  def autofit(worksheet)
-    worksheet.rows.each do |row|
-      lines_count = row.each_with_index.map do |cell, _index|
-        if cell.present?
-          words_count = cell.split(' ').count
-          lines = words_count / WORDS_IN_LINE
-          lines += 1 if words_count % WORDS_IN_LINE != 0
-          lines * LINE_HEIGHT
-        else
-          LINE_HEIGHT
-        end
-      end
-      row.height = lines_count.max
-    end
-    worksheet.column_count.times do |col_idx|
-      column = worksheet.column(col_idx)
-      column.width = column.each_with_index.map do |cell, _row|
-        if cell.present?
-          words = cell.split(' ')
-          words.each_slice(WORDS_IN_LINE).map do |line|
-            line.join(' ').size
-          end.max
-        else
-          0
-        end
-      end.max
     end
   end
 end
