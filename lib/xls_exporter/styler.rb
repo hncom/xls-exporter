@@ -10,7 +10,7 @@ module XlsExporter::Styler
   end
 
   def words_in_line
-    @words_in_line || 5 
+    @words_in_line || 5
   end
 
   def words_in_line=(count)
@@ -21,8 +21,8 @@ module XlsExporter::Styler
     @font_size || 10
   end
 
-  def font_size=(pt)
-    @font_size = pt
+  def font_size=(points)
+    @font_size = points
   end
 
   def autofit(worksheet)
