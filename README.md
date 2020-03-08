@@ -27,6 +27,11 @@ end
 require 'xls_exporter'
 
 XlsExporter.export do
+  default_style horizontal: :center,
+    vertical_align: center,
+    text_wrap: true,
+    font_size: 10,
+    words_in_line: 5
   filename 'your-file-name'
 
   add_sheet 'your-sheet-name'
